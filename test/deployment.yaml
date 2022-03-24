@@ -1,0 +1,31 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gin-test
+spec:
+  selector:
+    matchLabels:
+      app: gin-test
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      name: gin-test
+      labels:
+        app: gin-test
+    spec:
+      imagePullSecrets:
+        - name: docker-secret-new
+#      nodeSelector:
+#        department: devops
+      containers:
+        - image: registry.cn-chengdu.aliyuncs.com/studyup365/k8s:gin-test-0.0.1
+          name: gin-test
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
